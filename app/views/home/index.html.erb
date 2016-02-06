@@ -1,0 +1,8 @@
+<h1>
+  Welcome
+  <% if user_signed_in? %>
+    <%= current_user.first_name.humanize %>
+  <% end %>
+  :)
+</h1>
+<%= image_tag('cirma.jpg') %>

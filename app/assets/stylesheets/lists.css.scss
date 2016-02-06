@@ -1,0 +1,21 @@
+// Place all the styles related to the Lists controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+a:hover, a:focus {
+  color: #fff;
+  background-color: #764BC0;
+  text-decoration: none;
+}
+
+.btn-edit{
+  display: inline-block;
+}
+
+.lnk-new-list{
+  display: inline-block;
+}
+
+.add-list{
+  padding-left: 10px;
+}

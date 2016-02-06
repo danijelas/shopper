@@ -1,0 +1,63 @@
+<br>
+<div>
+  <%= 'Show' %>
+  <%= select_tag(:period, options_for_select([['All', 1000], ['Today', 1], ['Last 15 days', 15], ['Last Month', 30]], 1000)) %>
+  <%= link_to 'Filter', '#', id: 'filterButton', class: 'btn btn-info' %>
+</div>
+<canvas id="myChart" width="400" height="400"></canvas>
+<div>
+  <%= link_to 'Switch View', '#', id: 'switchReport', class: 'btn btn-info' %>
+</div>
+<br>
+<table>
+  <% if @cats_name_sum.size > 0 %>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Sum/Category</th>
+      </tr>
+    </thead>
+  <% end %>
+  <tbody>
+    <% @cats_name_sum.each do |key, val| %>
+      <tr>
+        <td style="width:25%;"><%= key %></td>
+        <td style="width:25%;"><%= number_with_precision(val, precision: 2) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= javascript_tag do -%>
+  var changeToBarView = false;
+  <% colours = ["#F7464A", "#46BFBD", "#FDB45C", "#B0171F", "#0000FF", "#00FA9A", "#FFFF00", "#EE7600", "#7A378B"]%>
+  <% highlights = ["#FF5A5E", "#5AD3D1", "#FFC870", "#DC143C", "#4169E1", "#54FF9F", "#FFF68F", "#ED9121", "#9932CC"]%>
+
+  <!-- # <% size = @cats_name_sum.size %> -->
+  var pieData = [];
+  <% @cats_name_sum.each_with_index do |(key, val), index| %>
+    var data = {
+      value: <%= val %>,
+      color: '<%= colours[index] %>',
+      highlight: '<%= highlights[index] %>',
+      label: '<%= key.to_s.html_safe %>'
+    };
+    pieData.push(data);
+  <% end %>
+
+  <% @labelsArray = @cats_name_sum.keys %>
+  var barData = {
+    labels: [<% @labelsArray.each do |lab| %>'<%= lab.to_s.html_safe %>',<% end %>],
+    datasets: [
+      {
+        label: "My First dataset",
+        fillColor: "rgba(151,187,205,0.5)",
+        strokeColor: "rgba(151,187,205,0.8)",
+        highlightFill: "rgba(151,187,205,0.75)",
+        highlightStroke: "rgba(151,187,205,1)",
+        data: <%= @cats_name_sum.values %>
+      }
+    ]
+  };
+  Report.drawChart('myChart', 'Pie', pieData, {animateScale : false, animationEasing : '', animationSteps : 50});
+<% end -%>

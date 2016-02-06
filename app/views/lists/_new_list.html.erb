@@ -1,0 +1,16 @@
+<%= form_for(@list, remote: true) do |lb| %>
+  <%= lb.hidden_field :currency, value: session[:currency] %>
+  <div class="modal-header">
+    <h4 class="modal-title" id="newListModalLabel"><strong>Add new list</strong></h4>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="list-name" class="control-label">Name:</label>
+      <%= lb.text_field :name, id: "list-name" %>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button id="closeModal" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+    <input id="updateModal" type="submit" class="btn btn-primary" value="Create">
+  </div>
+<% end -%>

@@ -1,0 +1,20 @@
+<tr class="fields">
+  <td>
+    <%= f.select(:category_id, current_user.categories.collect {|p| [ p.name, p.id ] }, {prompt: 'Select Category', selected: f.object.category_id}, class: 'category-select') %>
+  </td>
+  <td>
+    <%= f.text_field :name, id: "item-name" %>
+  </td>
+  <td>
+    <%= f.text_field :qty, id: "item-qty" %>
+  </td>
+  <td>
+    <%= f.select :unit, Item::UNIT_TYPES, prompt: 'Select Unit', id: "item-unit" %>
+  </td>
+  <td>
+    <%= f.text_field :price, id: "item-price" %>
+  </td>
+  <td>
+    <%= remove_link_unless_new_record("Remove", f, "remove_item") -%>
+  </td>
+</tr>

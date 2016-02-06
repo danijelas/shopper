@@ -1,0 +1,21 @@
+<%# navigation styled for Bootstrap 3.0 %>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <%= select_tag :currency, options_for_select(currency_codes, session[:currency]), class: 'form-control currency', id: 'currency_select', data: {remote: true, url: set_currency_url, method: :post}, disabled: @disable_currency_select %>
+      <%= link_to(image_tag("snoopy.ico", height: '45', width: '45', alt: "Shopper"), root_url, class: 'navbar-brand') %>
+    </div>
+
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <%= render 'layouts/navigation_links' %>
+      </ul>
+    </div>
+  </div>
+</nav>

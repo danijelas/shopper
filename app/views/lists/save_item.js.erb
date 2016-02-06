@@ -1,0 +1,11 @@
+var itemTr = $('tr[data-item=<%= @item_id%>]').remove();
+$('#items-done').append('<%= j(render :partial => "lists/item", locals: {item: @item}) %>');
+$('#total_sum').text('<%= items_sum(current_user, @items_for_selected_category, @list) %>');
+$('#itemModal').modal('hide');
+$('[data-toggle="popover"]').popover();
+
+<% if @disable_currency_select %>
+  $('#currency_select').prop('disabled', 'disabled');
+<% else %>
+  $('#currency_select').removeProp('disabled');
+<% end %>

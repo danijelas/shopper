@@ -1,0 +1,13 @@
+<tr data-category="<%= item.category_id %>" data-item="<%= item.id %>" data-list="<%= item.list.id%>" class="rows">
+  <td><%= check_box_tag :done, item.done, item.done?, class: 'checkDone', id: item.id, data: {list: item.list.id} %></td>
+  <td><%= item_link(item) %></td>
+  <td><%= item.qty %></td>
+  <td><%= item.unit %></td>
+  <% unless item.done %>
+    <td>
+      <%= link_to(delete_item_list_path(@list, item_id: item.id), class: "pull-right btn-trash remove_item", remote: true, method: :delete, data: { confirm: "Are you sure?" }) do %>
+        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+      <% end %>
+    </td>
+  <% end %>
+</tr>

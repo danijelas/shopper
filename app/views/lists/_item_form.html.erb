@@ -1,0 +1,34 @@
+<%= form_for(@list, url: save_item_list_path(@list), method: :post, remote: true) do |lb| %>
+  <div class="modal-header">
+    <!-- <button id="closeModal" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
+    <h4 class="modal-title" id="itemModalLabel"><strong><%= @item.name %> (review/edit data)</strong></h4>
+  </div>
+  <div class="modal-body">
+      <div class="form-group">
+        <%= lb.fields_for :items, @item do |f| %>
+            <%= f.hidden_field :category_id %>
+            <%= f.hidden_field :done, :value => true %>
+            <div class="form-group">
+              <label for="item-qty" class="control-label">Quantity</label>
+              <%= f.text_field :qty, id: "item-qty" %>
+            </div>
+            <div class="form-group">
+              <label for="item-unit" class="control-label">Unit</label>
+              <%= f.select :unit, Item::UNIT_TYPES, prompt: 'Select Unit', id: "item-unit" %>
+            </div>
+            <div class="form-group">
+              <label for="item-price" class="control-label">Price/Unit</label>
+              <%= f.text_field :price, id: "item-price" %>
+            </div>
+        <% end %>
+      </div>
+  </div>
+  <!-- <div class="modal-footer">
+    <input type="submit" class="btn btn-primary" value="Update">
+  </div> -->
+  <div class="modal-footer">
+    <button id="closeModal" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+    <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+    <input id="updateModal" type="submit" class="btn btn-primary" value="Update">
+  </div>
+<% end -%>
