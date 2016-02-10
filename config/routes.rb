@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     get '/change_category', action: :change_category, on: :member, as: :change_category
     post 'save_item', on: :member
     delete 'delete_item', on: :member
+    post 'create_item', action: :create_item, on: :member, as: :create_item
     # resources :items
   end
 

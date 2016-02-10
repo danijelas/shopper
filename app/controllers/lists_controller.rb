@@ -1,7 +1,7 @@
 class ListsController < ApplicationController
   before_filter :authenticate_user!
   before_action :set_list, except: [:index, :new, :create]
-  before_action :create_category, only: [:create, :update]
+  before_action :create_category, only: [:create, :update, :create_item]
   before_action :get_items_for_selected_category, only: [:item_undone, :change_category, :update_item, :save_item]
 
   respond_to :html, :js
@@ -115,6 +115,12 @@ class ListsController < ApplicationController
   def delete_item
     @item = @list.items.find_by_id(params[:item_id])
     @item.destroy
+  end
+
+  def create_item
+    unless @list.update(@list_params)
+      render js: "alert('#{@list.errors.full_messages.to_sentence}')"
+    end
   end
 
   private
