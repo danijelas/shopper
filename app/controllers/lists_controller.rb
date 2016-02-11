@@ -72,12 +72,8 @@ class ListsController < ApplicationController
   end
 
   def update
-    @list.update(@list_params)
-    # respond_with(@list)
-    if @list.name
-      render js: "window.location.href='#{lists_url}'"
-    else
-      # render 'lists/create_error'
+    unless @list.update(@list_params)
+      render 'lists/update_error'
     end
   end
 
