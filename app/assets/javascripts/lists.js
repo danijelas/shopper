@@ -122,4 +122,8 @@ $(document).on('shown.bs.modal', "#addItemModal", function() {
   $(this).find("[autofocus]:first").focus();
 });
 
+$(document).on('shown.bs.modal', "#newListModal", function() {
+  $('#list-name').focus();
+});
+
 
