@@ -117,7 +117,6 @@ $(document).on('click', '#closeModal', function () {
   $('.checkDone#'+itemId).removeProp('checked');
 });
 
-
 $(document).on('shown.bs.modal', "#addItemModal", function() {
   $(this).find("[autofocus]:first").focus();
 });
@@ -129,4 +128,8 @@ $(document).on('shown.bs.modal', "#newListModal", function() {
 $(document).on('shown.bs.modal', "#editListNameModal", function() {
   document.activeElement.blur();
   $(this).find("#list-name").focus();
+});
+
+$(document).on('shown.bs.modal', "#itemModal", function() {
+  $(this).find("#item-qty").focus();
 });
