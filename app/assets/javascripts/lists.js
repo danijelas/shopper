@@ -126,4 +126,7 @@ $(document).on('shown.bs.modal', "#newListModal", function() {
   $('#list-name').focus();
 });
 
-
+$(document).on('shown.bs.modal', "#editListNameModal", function() {
+  document.activeElement.blur();
+  $(this).find("#list-name").focus();
+});
