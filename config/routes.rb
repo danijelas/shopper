@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
 
   resources :lists do
-    post 'item_undone/:item_id', action: :item_undone, on: :member, as: :item_undone
-    post 'update_item/:item_id', action: :update_item, on: :member, as: :update_item
-    get '/change_category', action: :change_category, on: :member, as: :change_category
-    post 'save_item', on: :member
-    delete 'delete_item', on: :member
-    post 'create_item', action: :create_item, on: :member, as: :create_item
-    # resources :items
+    resources :items do
+      get 'show_confirm_done', action: :show_confirm_done, on: :member, as: :show_confirm_done
+      post 'save_done', action: :save_done, on: :member, as: :save_done
+      post 'undone', action: :undone, on: :member, as: :undone
+    
+      get '/change_category', action: :change_category, on: :member, as: :change_category
+    end
   end
 
   devise_for :users

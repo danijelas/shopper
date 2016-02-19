@@ -1,0 +1,8 @@
+$('tr[data-item=<%= @item.id%>]').replaceWith('<%= j(render :partial => "lists/item", locals: {item: @item}) %>');
+$('#editItemModal').modal('hide');
+
+<% if @disable_currency_select %>
+  $('#currency_select').prop('disabled', 'disabled');
+<% else %>
+  $('#currency_select').removeProp('disabled');
+<% end %>

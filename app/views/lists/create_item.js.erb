@@ -1,2 +1,0 @@
-$('#addItemModal').modal('hide');
-$('#items-not-done').append('<%= j(render :partial => "lists/item", locals: {item: @list.items.reload.last}) %>');

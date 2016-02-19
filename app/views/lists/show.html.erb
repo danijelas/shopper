@@ -20,9 +20,11 @@
 <br><br>
 <%= 'Category: ' %><%= select_tag(:category_select, options_for_select([['All', 0]]+current_user.categories.collect {|p| [ p.name, p.id ]}), { data: {:list => @list.id}, class: 'category-select-search'}) %>
 <br><br>
-<button type="button" class="pull-right" data-toggle="modal" data-target="#addItemModal">
+
+<%= link_to(new_list_item_path(@list), remote: true, class: 'pull-right') do %>
   <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-</button>
+<% end %>
+
 <a id="itemsNotDoneTitle" role="button" data-toggle="collapse" href="#items" aria-expanded="true" aria-controls="collapseExample">
   <strong> Items </strong>
 </a>
@@ -65,10 +67,16 @@
   </div>
 </div>
 
+<div class="modal fade" id="editItemModal" tabindex="-1" role="dialog" aria-labelledby="editItemModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="editItemModalContent">
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" id="addItemModalContent">
-      <%= render :partial => "lists/add_item_form" %>
     </div>
   </div>
 </div>

@@ -1,0 +1,2 @@
+$('#addItemModalContent .form-group.item-name').prepend('<%= j(@item.errors.full_messages.to_sentence)%><br>');
+$('#addItemModalContent .form-group.item-name').addClass('error');

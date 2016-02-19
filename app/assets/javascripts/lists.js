@@ -86,9 +86,9 @@ $(document).on('change', '.checkDone', function(e) {
   var itemId = $(this).attr('id');
   var listId = $(this).data('list');
   if ($(this).prop('checked') === true) {
-    $.post( "/lists/"+listId+"/update_item/"+itemId, {category: categorySelected});
+    $.get( "/lists/"+listId+"/items/"+itemId+"/show_confirm_done", {category: categorySelected});
   } else {
-    $.post( "/lists/"+listId+"/item_undone/"+itemId, {category: categorySelected});
+    $.post( "/lists/"+listId+"/items/"+itemId+"/undone", {category: categorySelected});
   }
 });
 
@@ -113,12 +113,12 @@ $(document).on('change', '#category_select', function (ev) {
 });
 
 $(document).on('click', '#closeModal', function () {
-  var itemId = $('#list_items_attributes_0_id').val();
+  var itemId = $('#itemModalLabel').attr('data-item');
   $('.checkDone#'+itemId).removeProp('checked');
 });
 
 $(document).on('shown.bs.modal', "#addItemModal", function() {
-  $(this).find("[autofocus]:first").focus();
+  $('#item-name').focus();
 });
 
 $(document).on('shown.bs.modal', "#newListModal", function() {

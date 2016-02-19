@@ -1,7 +1,7 @@
 class ListsController < ApplicationController
   before_filter :authenticate_user!
   before_action :set_list, except: [:index, :new, :create]
-  before_action :create_category, only: [:create, :update, :create_item]
+  before_action :create_category, only: [:create, :update]
   before_action :get_items_for_selected_category, only: [:item_undone, :change_category, :update_item, :save_item]
 
   respond_to :html, :js
@@ -53,13 +53,10 @@ class ListsController < ApplicationController
 
   def new
     @list = List.new
-    # binding.pry
-    # respond_with(@list)
   end
 
   def edit
-    # @items = @list.items.order(:category_id, :id)
-    
+
   end
 
   def create
@@ -82,41 +79,9 @@ class ListsController < ApplicationController
     respond_with(@list)
   end
 
-  def item_undone
-    @item = @list.items.find_by_id(params[:item_id])
-    unless @item.update_attribute(:done, false)
-      render js: "alert('Unable to toggle Done property!');"      
-    end
-  end
-
-  def update_item
-    @item = @list.items.find_by_id(params[:item_id])
-  end
-
-  def save_item
-    @list.update(list_params)
-    @item_id = list_params[:items_attributes].values.first[:id]
-    # binding.pry
-    @item = @list.items.find_by_id(@item_id)
-    if @list.items.done.count == 1
-      @list.update_attribute(:currency, session[:currency])
-    end
-  end
-
   def render(*args)
     set_disable_currency_select
     super
-  end
-
-  def delete_item
-    @item = @list.items.find_by_id(params[:item_id])
-    @item.destroy
-  end
-
-  def create_item
-    unless @list.update(@list_params)
-      render js: "alert('#{@list.errors.full_messages.to_sentence}')"
-    end
   end
 
   private
