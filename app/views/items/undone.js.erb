@@ -1,5 +1,5 @@
 var itemTr = $('tr[data-item=<%= @item.id%>]').remove();
-$('#items-not-done').append('<%= j(render :partial => "lists/item", locals: {item: @item}) %>');
+$('#items-not-done tbody').append('<%= j(render :partial => "lists/item", locals: {item: @item}) %>');
 $('#total_sum').text('<%= items_sum(current_user, @items_for_selected_category, @list) %>');
 
 <% if @disable_currency_select %>

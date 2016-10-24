@@ -1,8 +1,7 @@
 class ListsController < ApplicationController
   before_filter :authenticate_user!
   before_action :set_list, except: [:index, :new, :create]
-  before_action :create_category, only: [:create, :update]
-  before_action :get_items_for_selected_category, only: [:item_undone, :change_category, :update_item, :save_item]
+  # before_action :get_items_for_selected_category, only: :change_category
 
   respond_to :html, :js
 
@@ -13,6 +12,7 @@ class ListsController < ApplicationController
   end
 
   def show
+    session[:current_category] = 0
     session[:currency] = @list.currency
     @items_not_done = @list.items.not_done
     @items_sorted_by_category_not_done = Hash.new
@@ -60,7 +60,7 @@ class ListsController < ApplicationController
   end
 
   def create
-    @list = current_user.lists.build(@list_params)
+    @list = current_user.lists.build(list_params)
     if @list.save
       render js: "window.location.href='#{list_url(@list)}'"
     else
@@ -69,19 +69,23 @@ class ListsController < ApplicationController
   end
 
   def update
-    unless @list.update(@list_params)
+    unless @list.update(list_params)
       render 'lists/update_error'
     end
   end
 
   def destroy
     @list.destroy
-    respond_with(@list)
   end
 
   def render(*args)
     set_disable_currency_select
     super
+  end
+
+  def change_category
+    session[:current_category] = params[:category]
+    @done_items = @list.items.done
   end
 
   private
@@ -91,23 +95,7 @@ class ListsController < ApplicationController
     end
 
     def list_params
-      params.require(:list).permit(:name, :currency, items_attributes: [:id, :name, :qty, :unit, :price, :done, :_destroy, :category_id, :currency])
-    end
-
-    def create_category
-      @list_params = list_params
-      if @list_params[:items_attributes]
-        items_with_new_category = @list_params[:items_attributes].values.select{|item| item[:category_id].to_i == 0}
-        category_names = items_with_new_category.map{|x| x[:category_id]}.uniq
-        name_id = Hash.new
-        category_names.each do |cat_name|
-          category = Category.create(name: cat_name, user: current_user)
-          name_id[cat_name] = category.id
-        end
-        @list_params[:items_attributes].each do |key, item|
-          item[:category_id] = name_id[item[:category_id]] if item[:category_id].to_i == 0
-        end
-      end
+      params.require(:list).permit(:name, :currency)
     end
 
     def set_disable_currency_select
@@ -117,16 +105,15 @@ class ListsController < ApplicationController
       end
     end
 
-    def get_items_for_selected_category
-      category_id = if params[:list] && params[:list][:items_attributes] && params[:list][:items_attributes]['0'] && params[:list][:items_attributes]['0'][:category_id]
-                      params[:list][:items_attributes]['0'][:category_id].to_i
-                    elsif params[:category_id]
-                      params[:category_id].to_i
-                    else
-                      params[:category].to_i
-                    end
-      # binding.pry
-      @items_for_selected_category = category_id == 0 ? @list.items.done : @list.items.done.where(category: category_id)
-    end
+    # def get_items_for_selected_category
+    #   category_id = if params[:list] && params[:list][:items_attributes] && params[:list][:items_attributes]['0'] && params[:list][:items_attributes]['0'][:category_id]
+    #                   params[:list][:items_attributes]['0'][:category_id].to_i
+    #                 elsif params[:category_id]
+    #                   params[:category_id].to_i
+    #                 else
+    #                   params[:category].to_i
+    #                 end
+    #   @items_for_selected_category = category_id == 0 ? @list.items.done : @list.items.done.where(category: category_id)
+    # end
 
 end

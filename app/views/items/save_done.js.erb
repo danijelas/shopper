@@ -1,5 +1,5 @@
 var itemTr = $('tr[data-item=<%= @item.id%>]').remove();
-$('#items-done').append('<%= j(render :partial => "lists/item", locals: {item: @item}) %>');
+$('#items-done tbody').append('<%= j(render :partial => "lists/item", locals: {item: @item}) %>');
 $('#total_sum').text('<%= items_sum(current_user, @items_for_selected_category, @list) %>');
 $('#itemModal').modal('hide');
 $('[data-toggle="popover"]').popover();
@@ -8,4 +8,25 @@ $('[data-toggle="popover"]').popover();
   $('#currency_select').prop('disabled', 'disabled');
 <% else %>
   $('#currency_select').removeProp('disabled');
+<% end %>
+
+<% unless @item.category_id == session[:current_category].to_i %>
+  <!-- // initialize the selectize control -->
+  var $select = $("#category_select").selectize();
+  <!-- // fetch the instance -->
+  var selectize = $select[0].selectize;
+
+  selectedValue = selectize.getValue();
+
+  selectize.addOption({id: <%= @item.category_id %>, name: '<%= @item.category.name %>'})
+
+  selectize.addItem(<%= @item.category_id %>);
+
+  if (selectedValue == "0"){
+    selectize.setValue(selectedValue);
+  }
+  else {
+    selectize.setValue(<%= @item.category_id %>);
+  }
+
 <% end %>

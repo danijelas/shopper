@@ -12,10 +12,23 @@ a:hover, a:focus {
   display: inline-block;
 }
 
-.lnk-new-list{
+.lnk-new-list, .lnk-new-category{
   display: inline-block;
 }
 
 .add-list{
   padding-left: 10px;
+}
+.category-select, .unit-select{
+  display: table;
+}
+.category_label, .selectize-control, .unit_label{
+  display: table-cell;
+  vertical-align: middle;
+}
+.category_label, .unit_label{
+  padding-right: 10px;
+}
+.selectize-input {
+  width: 200px !important;
 }

@@ -1,3 +1,17 @@
+<div class="modal fade" id="editListNameModal" tabindex="-1" role="dialog" aria-labelledby="editListNameModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="editListNameModalContent">
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="newListModal" tabindex="-1" role="dialog" aria-labelledby="newListModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="newListModalContent">
+    </div>
+  </div>
+</div>
+
 <%= title('Lists')%>
 <h1 class="lnk-new-list">Lists</h1>
 <%= link_to(new_list_path, remote: true, class: "add-list") do %>
@@ -25,18 +39,4 @@
 </table>
 
 <br>
-
-<div class="modal fade" id="editListNameModal" tabindex="-1" role="dialog" aria-labelledby="editListNameModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content" id="editListNameModalContent">
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="newListModal" tabindex="-1" role="dialog" aria-labelledby="newListModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content" id="newListModalContent">
-    </div>
-  </div>
-</div>
 

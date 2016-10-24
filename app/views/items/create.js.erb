@@ -1,2 +1,31 @@
 $('#addItemModal').modal('hide');
-$('#items-not-done').append('<%= j(render :partial => "lists/item", locals: {item: @item}) %>');
+
+<% if @item.done %>
+  $('#items-done tbody').append('<%= j(render :partial => "lists/item", locals: {item: @item}) %>');
+  $('#total_sum').text('<%= items_sum(current_user, @items_for_selected_category, @list) %>');
+  $('[data-toggle="popover"]').popover();
+<% else %>
+  $('#items-not-done tbody').append('<%= j(render :partial => "lists/item", locals: {item: @item}) %>');
+<% end %>
+
+<% if @disable_currency_select %>
+  $('#currency_select').prop('disabled', 'disabled');
+<% else %>
+  $('#currency_select').removeProp('disabled');
+<% end %>
+
+$('#category').show();
+
+<% unless @item.category_id == session[:current_category].to_i %>
+  <!-- // initialize the selectize control -->
+  var $select = $("#category_select").selectize();
+  <!-- // fetch the instance -->
+  var selectize = $select[0].selectize;
+
+  selectize.addOption({id: <%= @item.category_id %>, name: '<%= @item.category.name %>'})
+
+  selectize.addItem(<%= @item.category_id %>);
+
+  <!-- selectize.setValue(<%#= @item.category_id %>); -->
+<% end %>
+

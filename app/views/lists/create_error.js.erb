@@ -1,2 +1,4 @@
-$('#newListModalContent .form-group').prepend('<%= j(@list.errors.full_messages.to_sentence)%><br>');
+$('.error-msg').remove();
+$('#newListModalContent .form-group').removeClass('error');
+$('#newListModalContent .form-group').prepend('<p class="error-msg"><%= j(@list.errors.full_messages.to_sentence)%><br>');
 $('#newListModalContent .form-group').addClass('error');

@@ -6,24 +6,62 @@
   };
   CATEGORIES_SEARCH.unshift(all);
   var CATEGORIES = <%= raw current_user.categories.to_json(only: [:id, :name]) %>;
+  var UNITS = <%= raw current_user.units.to_json(only: [:id, :name]) %>;
   $('#category_select').trigger('change');
 <% end -%>
+
+<div class="modal fade" id="itemModal" tabindex="-1" role="dialog" aria-labelledby="itemModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content" id="itemModalContent">
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editItemModal" tabindex="-1" role="dialog" aria-labelledby="editItemModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="editItemModalContent">
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="addItemModalContent">
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editListNameModal" tabindex="-1" role="dialog" aria-labelledby="editListNameModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="editListNameModalContent">
+    </div>
+  </div>
+</div>
 
 <%= title(@list.name)%>
 <p id="notice"><%= notice %></p>
 
-<h1 id="list-name" class="btn-edit"><%= @list.name %></h1>
-<%= link_to(edit_list_path(@list), remote: true) do %>
-  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-<% end %>
+<div class="form-group">
+  <h1 id="list-name-text" class="btn-edit"><%= @list.name %></h1>
+  <%= link_to(edit_list_path(@list), remote: true) do %>
+    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+  <% end %>
+</div>
 
-<br><br>
-<%= 'Category: ' %><%= select_tag(:category_select, options_for_select([['All', 0]]+current_user.categories.collect {|p| [ p.name, p.id ]}), { data: {:list => @list.id}, class: 'category-select-search'}) %>
-<br><br>
+<div class="form-group category-select" id="category" >
+  <%= label_tag :category_select, 'Category: ', class: 'category_label' %>
+  <%= select_tag(:category_select, options_for_select([['All', 0]]+current_user.categories.collect {|p| [ p.name, p.id ]}), { data: {:list => @list.id}, class: 'category-select-search'}) %>
+</div>
 
-<%= link_to(new_list_item_path(@list), remote: true, class: 'pull-right') do %>
-  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-<% end %>
+<div class="form-group">
+  <%= link_to 'Manage Categories', user_categories_path(current_user) %>
+</div>
+
+<div class="form-group">
+  <%= link_to(new_list_item_path(@list), remote: true, class: 'pull-right') do %>
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+  <% end %>
+</div>
 
 <a id="itemsNotDoneTitle" role="button" data-toggle="collapse" href="#items" aria-expanded="true" aria-controls="collapseExample">
   <strong> Items </strong>
@@ -58,34 +96,6 @@
 </div>
 <div>
   <%= link_to 'Back', lists_path %>
-</div>
-
-<div class="modal fade" id="itemModal" tabindex="-1" role="dialog" aria-labelledby="itemModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content" id="itemModalContent">
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="editItemModal" tabindex="-1" role="dialog" aria-labelledby="editItemModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content" id="editItemModalContent">
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content" id="addItemModalContent">
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="editListNameModal" tabindex="-1" role="dialog" aria-labelledby="editListNameModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content" id="editListNameModalContent">
-    </div>
-  </div>
 </div>
 
 

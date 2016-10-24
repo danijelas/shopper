@@ -1,12 +1,16 @@
 <%= form_for([@list, @item], remote: true) do |f| %>
   <div class="modal-header">
-    <h4 class="modal-title" id="editItemModalLabel" data-item="<%= @item.id %>"><strong><%= @item.name %> (review/edit data cica)</strong></h4>
+    <h4 class="modal-title" id="editItemModalLabel" data-item="<%= @item.id %>"><strong><%= @item.name %> (review/edit data)</strong></h4>
   </div>
   <div class="modal-body">
     <div class="form-group">
       <%= f.hidden_field :category_id %>
       <%= f.hidden_field :done %>
-      <div class="form-group">
+      <div class="form-group category-select">
+      <label for="item-category" class="control-label category_label">Category</label>
+      <%= f.select :category_id, current_user.categories.collect {|p| [ p.name, p.id ] }, {prompt: 'Select Category'}, {class: 'category-select-search'} %>
+      </div>
+      <div class="form-group item-name">
         <label for="item-name" class="control-label">Name</label>
         <%= f.text_field :name, id: "item-name" %>
       </div>
@@ -14,9 +18,9 @@
         <label for="item-qty" class="control-label">Quantity</label>
         <%= f.text_field :qty, id: "item-qty" %>
       </div>
-      <div class="form-group">
-        <label for="item-unit" class="control-label">Unit</label>
-        <%= f.select :unit, Item::UNIT_TYPES, prompt: 'Select Unit', id: "item-unit" %>
+      <div class="form-group unit-select">
+        <label for="item-unit" class="control-label unit_label">Unit</label>
+        <%= f.select :unit_id, current_user.units.collect {|p| [ p.name, p.id ] }, prompt: 'Select Unit', id: "item-unit" %>
       </div>
       <div class="form-group">
         <label for="item-price" class="control-label">Price/Unit</label>

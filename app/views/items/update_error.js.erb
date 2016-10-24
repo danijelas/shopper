@@ -1,0 +1,6 @@
+$('.error-msg').remove();
+$('#editItemModalContent .form-group').removeClass('error');
+<% @item.errors.keys.each do |field| %>
+  $('#editItemModalContent .form-group label[for=item-<%= field %>]').parent().addClass('error');
+  $('#editItemModalContent .form-group label[for=item-<%= field %>]').parent().prepend('<p class="error-msg"><%= j(@item.errors.full_messages_for(field).to_sentence)%></p>');
+<% end %>

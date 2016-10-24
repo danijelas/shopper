@@ -1,62 +1,35 @@
+var CATEGORIES_SEARCH = [];
 $(document).on('ready page:load', function () {
   $('a[href="' + this.location.pathname + '"]').parent().addClass('active');
   hideItemTableHead();
+  hideCategorySelect();
   // createItemUnitTypeahead();
-  var selects = [];
-  $('.category-select').each(function() {
-    var select = $(this).selectize({
-      valueField: 'id',
-      labelField: 'name',
-      searchField: ['name'],
-      options: CATEGORIES,
-      create: true,
-      onOptionAdd: function (value, data) {
-        // console.log(value);
-        // console.log(data);
-        addNewOptionToSelect(selects, this, data);
-      }
-    });
-    selects.push(select);
-  });
+
+  setupSelectize('select#category_select', CATEGORIES_SEARCH, false);
+
   $('[data-toggle="popover"]').popover();
-  $('.category-select-search').each(function() {
-    $(this).selectize({
-      valueField: 'id',
-      labelField: 'name',
-      searchField: ['name'],
-      options: CATEGORIES_SEARCH,
-      create: false
-    });
-  });
 });
 
-function addNewOptionToSelect(selects, triggerSelect, option) {
-  for (var i = 0; i < selects.length; i++) {
-    var current = selects[i][0].selectize;
-    if (current != triggerSelect)
-      current.addOption(option);
-  };
-}
-
-$(document).on('click', '.add_item', function() {
-  $('table#items thead').removeClass('hidden');
-  NestedAttributesJs.add(this);
-  $('tr.fields').last().find('.category-select').selectize({
-    valueField: 'id',
-    labelField: 'name',
-    searchField: ['name'],
-    options: CATEGORIES,
-    create: true
-  });
-  // createItemUnitTypeahead();
-  return false;
-});
+// function addNewOptionToSelect(selects, triggerSelect, option) {
+//   for (var i = 0; i < selects.length; i++) {
+//     var current = selects[i][0].selectize;
+//     if (current != triggerSelect)
+//       current.addOption(option);
+//   };
+// }
 
 // $(document).on('click', '.remove_item', function() {
-//   NestedAttributesJs.remove(this);
-//   hideItemTableHead();
+//   // NestedAttributesJs.remove(this);
+//   // hideItemTableHead();
+//   hideCategorySelect();
 //   return false;
 // });
+
+function hideCategorySelect() {
+  if($('#items-not-done tbody tr').length === 0 && $('#items-done tbody tr').length === 0){
+    $('#category').hide();
+  }
+};
 
 function hideItemTableHead() {
   if ($('table#items tbody tr:not(.hidden)').length === 0) {
@@ -88,7 +61,12 @@ $(document).on('change', '.checkDone', function(e) {
   if ($(this).prop('checked') === true) {
     $.get( "/lists/"+listId+"/items/"+itemId+"/show_confirm_done", {category: categorySelected});
   } else {
-    $.post( "/lists/"+listId+"/items/"+itemId+"/undone", {category: categorySelected});
+    message = confirm("Are you sure?");
+    if(message) {
+      $.post( "/lists/"+listId+"/items/"+itemId+"/undone", {category: categorySelected});
+    } else {
+     $(this).prop('checked', true);
+    }
   }
 });
 
@@ -118,18 +96,58 @@ $(document).on('click', '#closeModal', function () {
 });
 
 $(document).on('shown.bs.modal', "#addItemModal", function() {
-  $('#item-name').focus();
+  $(this).find("#item-name").focus();
+  setupSelectize('select#item_category_id', CATEGORIES, true);
+  setupSelectize('select#item_unit_id', UNITS, true);
 });
 
 $(document).on('shown.bs.modal', "#newListModal", function() {
-  $('#list-name').focus();
+  $('#newListModalContent #list-name').focus();
 });
 
 $(document).on('shown.bs.modal', "#editListNameModal", function() {
   document.activeElement.blur();
-  $(this).find("#list-name").focus();
+  var input = $(this).find("#editListNameModalContent #list-name").focus();
+  var tmpStr = input.val();
+  input.val('');
+  input.val(tmpStr);
 });
 
 $(document).on('shown.bs.modal', "#itemModal", function() {
-  $(this).find("#item-qty").focus();
+  var input = $(this).find("#item-name").focus();
+  var tmpStr = input.val();
+  input.val('');
+  input.val(tmpStr);
+  setupSelectize('select#item_category_id', CATEGORIES, true);
+  setupSelectize('select#item_unit_id', UNITS, true);
 });
+
+$(document).on('shown.bs.modal', "#editItemModal", function() {
+  var input = $(this).find("#item-name").focus();
+  var tmpStr = input.val();
+  input.val('');
+  input.val(tmpStr);
+  setupSelectize('select#item_category_id', CATEGORIES, true);
+  setupSelectize('select#item_unit_id', UNITS, true);
+});
+
+$(document).on('shown.bs.modal', "#newCategoryModal", function() {
+  $(this).find('#category-name').focus();
+});
+
+$(document).on('shown.bs.modal', "#editCategoryNameModal", function() {
+  var input = $(this).find('#category-name').focus();
+  var tmpStr = input.val();
+  input.val('');
+  input.val(tmpStr);
+});
+
+function setupSelectize(selector, options, create) {
+  $(selector).selectize({
+    valueField: 'id',
+    labelField: 'name',
+    searchField: ['name'],
+    options: options,
+    create: create
+  });
+}

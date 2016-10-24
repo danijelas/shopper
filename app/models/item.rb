@@ -4,11 +4,14 @@ class Item < ActiveRecord::Base
   
   belongs_to :list
   belongs_to :category
+  belongs_to :unit
 
-  UNIT_TYPES = [ "kg", "l", "m", "pic", "something" ]
+  # UNIT_TYPES = [ "kg", "l", "m", "pic", "other" ]
 
   validates :name, presence: true, uniqueness: { scope: :list_id, case_sensitive: false }
   # validates :unit, inclusion: UNIT_TYPES
+  validates :qty, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
+  validates :price, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
 
   scope :done, -> { where(done: true) }
   scope :not_done, -> { where(done: false) }

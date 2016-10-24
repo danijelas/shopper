@@ -1,0 +1,15 @@
+<%= form_for([current_user, @category], remote: true) do |lb| %>
+  <div class="modal-header">
+    <h4 class="modal-title" id="newCategoryModalLabel"><strong>Add new category</strong></h4>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="category-name" class="control-label">Name:</label>
+      <%= lb.text_field :name, id: "category-name" %>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button id="closeModal" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+    <input id="updateModal" type="submit" class="btn btn-primary" value="Create">
+  </div>
+<% end -%>

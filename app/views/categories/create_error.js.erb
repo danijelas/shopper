@@ -1,0 +1,4 @@
+$('.error-msg').remove();
+$('#newCategoryModalContent .form-group').removeClass('error');
+$('#newCategoryModalContent .form-group').prepend('<p class="error-msg"><%= j(@category.errors.full_messages.to_sentence)%><br>');
+$('#newCategoryModalContent .form-group').addClass('error');

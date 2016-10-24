@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150804133638) do
+ActiveRecord::Schema.define(version: 20160826144032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,14 +27,14 @@ ActiveRecord::Schema.define(version: 20150804133638) do
 
   create_table "items", force: true do |t|
     t.integer  "list_id"
+    t.integer  "category_id"
+    t.integer  "unit_id"
     t.string   "name"
     t.decimal  "qty",         precision: 10, scale: 2, default: 0.0
-    t.string   "unit"
     t.decimal  "price",       precision: 10, scale: 2, default: 0.0
     t.boolean  "done",                                 default: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "category_id"
   end
 
   add_index "items", ["list_id"], name: "index_items_on_list_id", using: :btree
@@ -42,12 +42,19 @@ ActiveRecord::Schema.define(version: 20150804133638) do
   create_table "lists", force: true do |t|
     t.integer  "user_id"
     t.string   "name"
+    t.string   "currency"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "currency"
   end
 
   add_index "lists", ["user_id"], name: "index_lists_on_user_id", using: :btree
+
+  create_table "units", force: true do |t|
+    t.integer "user_id"
+    t.string  "name"
+  end
+
+  add_index "units", ["user_id"], name: "index_units_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false

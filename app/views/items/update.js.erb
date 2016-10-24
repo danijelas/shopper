@@ -1,8 +1,24 @@
 $('tr[data-item=<%= @item.id%>]').replaceWith('<%= j(render :partial => "lists/item", locals: {item: @item}) %>');
 $('#editItemModal').modal('hide');
 
-<% if @disable_currency_select %>
-  $('#currency_select').prop('disabled', 'disabled');
-<% else %>
-  $('#currency_select').removeProp('disabled');
+
+<% unless @item.category_id == session[:current_category].to_i %>
+  <!-- // initialize the selectize control -->
+  var $select = $("#category_select").selectize();
+  <!-- // fetch the instance -->
+  var selectize = $select[0].selectize;
+
+  var selectedValue = selectize.getValue();
+
+  selectize.addOption({id: <%= @item.category_id %>, name: '<%= @item.category.name %>'})
+
+  selectize.addItem(<%= @item.category_id %>);
+
+  if (selectedValue == "0"){
+    selectize.setValue(selectedValue);
+  }
+  else {
+    selectize.setValue(<%= @item.category_id %>);
+  }
+
 <% end %>

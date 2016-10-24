@@ -6,8 +6,9 @@ class User < ActiveRecord::Base
 
   has_many :lists, dependent: :destroy
   has_many :categories, -> { order(id: :asc) },  dependent: :destroy
+  has_many :units, -> { order(id: :asc) },  dependent: :destroy
 
-  after_create :populate_categories
+  after_create :populate_categories, :populate_units
 
   validates :first_name, :last_name, :currency, presence: true
 
@@ -24,5 +25,13 @@ class User < ActiveRecord::Base
     self.categories << Category.new(name: 'Meat')
     self.categories << Category.new(name: 'Home Chemistry')
     self.categories << Category.new(name: 'Miscellaneous')
+  end
+
+  def populate_units
+    self.units << Unit.new(name: 'kg')
+    self.units << Unit.new(name: 'l')
+    self.units << Unit.new(name: 'm')
+    self.units << Unit.new(name: 'pic')
+    self.units << Unit.new(name: 'other')
   end
 end

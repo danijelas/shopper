@@ -1,0 +1,27 @@
+<div class="modal fade" id="editCategoryNameModal" tabindex="-1" role="dialog" aria-labelledby="editCategoryNameModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="editCategoryNameModalContent">
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="newCategoryModal" tabindex="-1" role="dialog" aria-labelledby="newCategoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="newCategoryModalContent">
+    </div>
+  </div>
+</div>
+
+<%= title('Categories')%>
+<h1 class="lnk-new-category">Categories</h1>
+<%= link_to(new_user_category_path, remote: true, class: "add-category") do %>
+  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+<% end %>
+
+<table id='categories'>
+  <tbody>
+    <% @categories.each do |category| %>
+      <%= (render :partial => "category", locals: {category: category}) %>
+    <% end %>
+  </tbody>
+</table>

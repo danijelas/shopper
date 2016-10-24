@@ -39,11 +39,16 @@ module ListsHelper
     if item.done
       link = '<a tabindex="0" role="button" data-toggle="popover"'
       link << ' data-placement="top" data-trigger="focus" data-original-title="Total: '+item_sum(current_user, item)
-      link << '" data-content="Price/Unit '+item.price.to_s+'&nbsp;'+item.list.currency+'">'
+      link << '" data-content="Price/Unit '+format_price(item)+'">'
       link << '<strong>'+item.name+'</strong></a>'
       link.html_safe
     else
       raw '<strong>'+item.name+'</strong>'
     end
+  end
+
+  def format_price(item)
+    price = item.price.nil? ? 0 : item.price
+    number_to_currency(price, unit: item.list.currency, format: "%n %u")
   end
 end

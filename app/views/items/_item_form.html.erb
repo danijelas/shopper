@@ -1,18 +1,22 @@
 <%= form_for(@item, url: save_done_list_item_path(@list, @item), method: :post, remote: true) do |f| %>
   <div class="modal-header">
-    <h4 class="modal-title" id="itemModalLabel" data-item="<%= @item.id %>"><strong><%= @item.name %> (review/edit data)</strong></h4>
+    <h4 class="modal-title" id="itemModalLabel" data-item="<%= @item.id %>"><strong><%= f.text_field :name, id: "item-name" %></strong></h4>
   </div>
   <div class="modal-body">
     <div class="form-group">
       <%= f.hidden_field :category_id %>
       <%= f.hidden_field :done, :value => true %>
+      <div class="form-group category-select">
+      <label for="item-category" class="control-label category_label">Category</label>
+      <%= f.select :category_id, current_user.categories.collect {|p| [ p.name, p.id ] }, {prompt: 'Select Category'}, {class: 'category-select-search'} %>
+      </div>
       <div class="form-group">
         <label for="item-qty" class="control-label">Quantity</label>
         <%= f.text_field :qty, id: "item-qty" %>
       </div>
-      <div class="form-group">
-        <label for="item-unit" class="control-label">Unit</label>
-        <%= f.select :unit, Item::UNIT_TYPES, prompt: 'Select Unit', id: "item-unit" %>
+      <div class="form-group unit-select">
+        <label for="item-unit" class="control-label unit_label">Unit</label>
+        <%= f.select :unit_id, current_user.units.collect {|p| [ p.name, p.id ] }, prompt: 'Select Unit', id: "item-unit" %>
       </div>
       <div class="form-group">
         <label for="item-price" class="control-label">Price/Unit</label>
@@ -22,6 +26,6 @@
   </div>
   <div class="modal-footer">
     <button id="closeModal" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-    <input id="updateModal" type="submit" class="btn btn-primary" value="Update">
+    <input id="updateModal" type="submit" class="btn btn-primary" value="OK">
   </div>
 <% end -%>

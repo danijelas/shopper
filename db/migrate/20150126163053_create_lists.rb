@@ -3,6 +3,7 @@ class CreateLists < ActiveRecord::Migration
     create_table :lists do |t|
       t.references :user, index: { name: 'index_lists_on_user_id' }
       t.string :name
+      t.string :currency
 
       t.timestamps
     end

@@ -1,0 +1,2 @@
+$('#newCategoryModal').modal('hide');
+$('#categories tbody').append('<%= j(render :partial => "category", locals: {category: @category}) %>');

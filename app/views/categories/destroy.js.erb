@@ -1,0 +1,3 @@
+<% if @category.items.size == 0 %>
+  $('tr#category-<%=@category.id%>').remove();
+<% end %>

@@ -1,6 +1,6 @@
 if($('#list-name-<%= @list.id %>').length > 0){
   $('#list-name-<%= @list.id %>').html('<strong><%= link_to @list.name, @list %></strong>');
 } else {
-  $('#list-name').text('<%= @list.name %>');
+  $('#list-name-text').text('<%= @list.name %>');
 }
 $('#editListNameModal').modal('hide');

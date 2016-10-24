@@ -1,1 +1,4 @@
 $('tr[data-item=<%= @item.id %>]').remove();
+if($('#items-not-done tbody tr').length === 0 && $('#items-done tbody tr').length === 0){
+  $('#category').hide();
+};

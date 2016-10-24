@@ -1,2 +1,6 @@
-$('#addItemModalContent .form-group.item-name').prepend('<%= j(@item.errors.full_messages.to_sentence)%><br>');
-$('#addItemModalContent .form-group.item-name').addClass('error');
+$('.error-msg').remove();
+$('#addItemModalContent .form-group').removeClass('error');
+<% @item.errors.keys.each do |field| %>
+  $('#addItemModalContent .form-group label[for=item-<%= field %>]').parent().addClass('error');
+  $('#addItemModalContent .form-group label[for=item-<%= field %>]').parent().prepend('<p class="error-msg"><%= j(@item.errors.full_messages_for(field).to_sentence)%></p>');
+<% end %>
