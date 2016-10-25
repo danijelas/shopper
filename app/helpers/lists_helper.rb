@@ -39,7 +39,7 @@ module ListsHelper
     if item.done
       link = '<a tabindex="0" role="button" data-toggle="popover"'
       link << ' data-placement="top" data-trigger="focus" data-original-title="Total: '+item_sum(current_user, item)
-      link << '" data-content="Price/Unit '+format_price(item)+'">'
+      link << '" data-content="Price '+format_price(item)+'">'
       link << '<strong>'+item.name+'</strong></a>'
       link.html_safe
     else

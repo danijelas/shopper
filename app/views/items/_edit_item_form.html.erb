@@ -1,6 +1,9 @@
 <%= form_for([@list, @item], remote: true) do |f| %>
-  <div class="modal-header">
+  <!-- <div class="modal-header">
     <h4 class="modal-title" id="editItemModalLabel" data-item="<%= @item.id %>"><strong><%= @item.name %> (review/edit data)</strong></h4>
+  </div> -->
+  <div class="modal-header">
+    <h4 class="modal-title" id="editItemModalLabel" data-item="<%= @item.id %>"><strong><%= f.text_field :name, id: "item-name" %></strong></h4>
   </div>
   <div class="modal-body">
     <div class="form-group">
@@ -10,11 +13,11 @@
       <label for="item-category" class="control-label category_label">Category</label>
       <%= f.select :category_id, current_user.categories.collect {|p| [ p.name, p.id ] }, {prompt: 'Select Category'}, {class: 'category-select-search'} %>
       </div>
-      <div class="form-group item-name">
+      <!-- <div class="form-group item-name">
         <label for="item-name" class="control-label">Name</label>
         <%= f.text_field :name, id: "item-name" %>
-      </div>
-      <div class="form-group">
+      </div> -->
+      <!-- <div class="form-group">
         <label for="item-qty" class="control-label">Quantity</label>
         <%= f.text_field :qty, id: "item-qty" %>
       </div>
@@ -25,7 +28,15 @@
       <div class="form-group">
         <label for="item-price" class="control-label">Price/Unit</label>
         <%= f.text_field :price, id: "item-price" %>
+      </div> -->
+      <div class="form-group item-description">
+        <label for="item-description" class="control-label">Description</label>
+        <%= f.text_field :description, id: "item-description" %>
       </div>
+      <div class="form-group">
+      <label for="item-price" class="control-label">Price</label>
+      <%= f.text_field :price, id: "item-price", value: '' %>
+    </div>
     </div>
   </div>
   <div class="modal-footer">
