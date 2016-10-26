@@ -11,8 +11,20 @@ module ListsHelper
     end
   end
 
+  # def item_sum(current_user, item)
+  #   sum = number_with_precision(item.item_sum, precision: 2)
+  #   if !(item.list.currency.blank?) && (item.list.currency != current_user.currency)
+  #     sum_in_cents = sum.to_f * 100
+  #     money = Money.new(sum_in_cents, item.list.currency)
+  #     money = money.exchange_to(current_user.currency)
+  #     sum = sum + ' ' + item.list.currency + '/' + money + ' ' + current_user.currency
+  #   else
+  #     sum = sum + ' ' + current_user.currency
+  #   end
+  # end
+
   def item_sum(current_user, item)
-    sum = number_with_precision(item.item_sum, precision: 2)
+    sum = number_with_precision(item.price, precision: 2)
     if !(item.list.currency.blank?) && (item.list.currency != current_user.currency)
       sum_in_cents = sum.to_f * 100
       money = Money.new(sum_in_cents, item.list.currency)
@@ -23,8 +35,20 @@ module ListsHelper
     end
   end
 
+  # def items_sum(current_user, items, list)
+  #   sum = number_with_precision(items.map(&:item_sum).sum, precision: 2)
+  #   if !(list.currency.blank?) && (list.currency != current_user.currency)
+  #     sum_in_cents = sum.to_f * 100
+  #     money = Money.new(sum_in_cents, list.currency)
+  #     money = money.exchange_to(current_user.currency)
+  #     sum = sum + ' ' + list.currency + '/' + money + ' ' + current_user.currency
+  #   else
+  #     sum = sum + ' ' + current_user.currency
+  #   end
+  # end
+
   def items_sum(current_user, items, list)
-    sum = number_with_precision(items.map(&:item_sum).sum, precision: 2)
+    sum = number_with_precision(items.map(&:price).sum, precision: 2)
     if !(list.currency.blank?) && (list.currency != current_user.currency)
       sum_in_cents = sum.to_f * 100
       money = Money.new(sum_in_cents, list.currency)

@@ -89,7 +89,8 @@
     <tbody>
       <% @items_sorted_by_category_done.each do |category, items|%>
         <%= render partial: "item", collection: items %>
-        <% sum = items.map(&:item_sum).sum %>
+        <!-- <#% sum = items.map(&:item_sum).sum %> -->
+        <% sum = items.map(&:price).sum %>
       <% end %>
     </tbody>
   </table>

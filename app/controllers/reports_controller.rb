@@ -8,7 +8,8 @@ class ReportsController < ApplicationController
     current_user.categories.each do |cat|
       cat_sum = 0
       cat.items.each do |item|
-        cat_sum += item.item_sum_user_currency if item.done
+        # cat_sum += item.item_sum_user_currency if item.done
+        cat_sum += item.price_user_currency if item.done
       end
       @cats_name_sum[cat.name] = cat_sum
     end
@@ -23,7 +24,8 @@ class ReportsController < ApplicationController
     current_user.categories.each do |cat|
       cat_sum = 0
       cat.items.each do |item|
-        cat_sum += item.item_sum_user_currency if (item.done && (Time.now - days.day <= item.updated_at) && (item.updated_at <= Time.now))
+        # cat_sum += item.item_sum_user_currency if (item.done && (Time.now - days.day <= item.updated_at) && (item.updated_at <= Time.now))
+        cat_sum += item.price_user_currency if (item.done && (Time.now - days.day <= item.updated_at) && (item.updated_at <= Time.now))
       end
       @cats_name_sum[cat.name] = cat_sum
     end

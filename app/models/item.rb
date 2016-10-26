@@ -16,17 +16,27 @@ class Item < ActiveRecord::Base
   scope :done, -> { where(done: true) }
   scope :not_done, -> { where(done: false) }
 
-  def item_sum
-    (price && qty) ? price * qty : 0
-  end
+  # def item_sum
+  #   (price && qty) ? price * qty : 0
+  # end
 
-  def item_sum_user_currency
-    if item_sum && list.currency && (list.currency != list.user.currency)
-      sum_in_cents = item_sum.to_f * 100
+  # def item_sum_user_currency
+  #   if item_sum && list.currency && (list.currency != list.user.currency)
+  #     sum_in_cents = item_sum.to_f * 100
+  #     money = Money.new(sum_in_cents, list.currency)
+  #     money.exchange_to(list.user.currency).to_f
+  #   else
+  #     item_sum.to_f
+  #   end
+  # end
+
+  def price_user_currency
+    if price && list.currency && (list.currency != list.user.currency)
+      sum_in_cents = price.to_f * 100
       money = Money.new(sum_in_cents, list.currency)
       money.exchange_to(list.user.currency).to_f
     else
-      item_sum.to_f
+      price.to_f
     end
   end
 

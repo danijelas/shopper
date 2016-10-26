@@ -7,9 +7,13 @@ class List < ActiveRecord::Base
 
   before_save :set_currency
 
+  # def total_sum
+  #   items.select { |item| item.done == true }.map(&:item_sum).sum
+  #   # map { |e| e.item_sum  }
+  # end
+
   def total_sum
-    items.select { |item| item.done == true }.map(&:item_sum).sum
-    # map { |e| e.item_sum  }
+    items.select { |item| item.done == true }.map(&:price).sum
   end
 
   def set_currency
