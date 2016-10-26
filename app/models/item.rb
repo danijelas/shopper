@@ -11,7 +11,7 @@ class Item < ActiveRecord::Base
   validates :name, presence: true, uniqueness: { scope: :list_id, case_sensitive: false }
   # validates :unit, inclusion: UNIT_TYPES
   validates :qty, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
-  validates :price, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
+  validates :price, numericality: { greater_than_or_equal_to: 0 }
 
   scope :done, -> { where(done: true) }
   scope :not_done, -> { where(done: false) }
@@ -31,6 +31,9 @@ class Item < ActiveRecord::Base
   # end
 
   def price_user_currency
+    # if !price
+    #   price = 0
+    # end
     if price && list.currency && (list.currency != list.user.currency)
       sum_in_cents = price.to_f * 100
       money = Money.new(sum_in_cents, list.currency)
