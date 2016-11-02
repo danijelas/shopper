@@ -31,9 +31,6 @@ class Item < ActiveRecord::Base
   # end
 
   def price_user_currency
-    # if !price
-    #   price = 0
-    # end
     if price && list.currency && (list.currency != list.user.currency)
       sum_in_cents = price.to_f * 100
       money = Money.new(sum_in_cents, list.currency)
