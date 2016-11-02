@@ -2,8 +2,6 @@
 <tr data-category="<%= item.category_id %>" data-item="<%= item.id %>" data-list="<%= item.list.id%>" class="rows">
   <td><%= check_box_tag :done, item.done, item.done?, class: 'checkDone', id: item.id, data: {list: item.list.id} %></td>
   <td><%= item_link(item) %></td>
-  <!-- <td><%= item.qty %></td> -->
-  <!-- <td><%= item.unit.nil? ? '' : item.unit.name %></td> -->
   <td><%= item.price %></td>
   <% unless item.done %>
     <td>
