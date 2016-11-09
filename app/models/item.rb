@@ -1,13 +1,9 @@
 class Item < ActiveRecord::Base
-  require 'action_view'
-  include ActionView::Helpers::NumberHelper
-  
   belongs_to :list
   belongs_to :category
-  belongs_to :unit
+  before_validation :set_category, if: 'self.category.nil?'
 
   validates :name, presence: true, uniqueness: { scope: :list_id, case_sensitive: false }
-  validates :qty, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
   validates :price, numericality: { greater_than_or_equal_to: 0 }
 
   scope :done, -> { where(done: true) }
@@ -22,5 +18,11 @@ class Item < ActiveRecord::Base
       price.to_f
     end
   end
+
+  protected
+
+    def set_category
+      self.category = Category.find_or_create_by!(name: 'Miscellaneous', user: self.list.user)
+    end
 
 end

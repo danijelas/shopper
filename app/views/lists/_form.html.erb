@@ -1,44 +1,45 @@
-<%= form_for(@list) do |f| %>
-  <% if @list.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@list.errors.count, "error") %> prohibited this list from being saved:</h2>
+<!-- # <%= form_for(@list) do |f| %>
+#   <% if @list.errors.any? %>
+#     <div id="error_explanation">
+#       <h2><%= pluralize(@list.errors.count, "error") %> prohibited this list from being saved:</h2>
 
-      <ul>
-      <% @list.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+#       <ul>
+#       <% @list.errors.full_messages.each do |message| %>
+#         <li><%= message %></li>
+#       <% end %>
+#       </ul>
+#     </div>
+#   <% end %>
 
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
-  <table id='items' class="table table-striped">
-    <thead id="table-head">
-      <tr>
-        <th>Category</th>
-        <th>Name</th>
-        <th>Quantity</th>
-        <th>Unit</th>
-        <th>Price/Unit</th>
-      </tr>
-    </thead>
-    <tbody>
-      <%= f.fields_for :items, @items do |builder| %>
-        <%= render "item_fields", f: builder %>
-      <% end %>
-      <%= nested_attributes_for f, :items, partial: 'item_fields' %>
-      <%= add_child_link "Add Item", :items, "add_item btn btn-info" %>
-    </tbody>
-  </table>
-  <div class="actions">
-    <%= f.submit class: 'btn btn-primary'%>
-  </div>
-<% end %>
+#   <div class="field">
+#     <%= f.label :name %><br>
+#     <%= f.text_field :name %>
+#   </div>
+#   <table id='items' class="table table-striped">
+#     <thead id="table-head">
+#       <tr>
+#         <th>Category</th>
+#         <th>Name</th>
+#         <th>Quantity</th>
+#         <th>Unit</th>
+#         <th>Price/Unit</th>
+#       </tr>
+#     </thead>
+#     <tbody>
+#       <%= f.fields_for :items, @items do |builder| %>
+#         <%= render "item_fields", f: builder %>
+#       <% end %>
+#       <%= nested_attributes_for f, :items, partial: 'item_fields' %>
+#       <%= add_child_link "Add Item", :items, "add_item btn btn-info" %>
+#     </tbody>
+#   </table>
+#   <div class="actions">
+#     <%= f.submit class: 'btn btn-primary'%>
+#   </div>
+# <% end %>
 
-<%= javascript_tag do -%>
-  var CATEGORIES = <%= raw current_user.categories.to_json(only: [:id, :name]) %>;
-<% end -%>
+# <%= javascript_tag do -%>
+#   var CATEGORIES = <%= raw current_user.categories.to_json(only: [:id, :name]) %>;
+# <% end -%>
 
+ -->

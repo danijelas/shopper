@@ -3,27 +3,11 @@ $(document).on('ready page:load', function () {
   $('a[href="' + this.location.pathname + '"]').parent().addClass('active');
   hideItemTableHead();
   hideCategorySelect();
-  // createItemUnitTypeahead();
 
   setupSelectize('select#category_select', CATEGORIES_SEARCH, false);
 
   $('[data-toggle="popover"]').popover();
 });
-
-// function addNewOptionToSelect(selects, triggerSelect, option) {
-//   for (var i = 0; i < selects.length; i++) {
-//     var current = selects[i][0].selectize;
-//     if (current != triggerSelect)
-//       current.addOption(option);
-//   };
-// }
-
-// $(document).on('click', '.remove_item', function() {
-//   // NestedAttributesJs.remove(this);
-//   // hideItemTableHead();
-//   hideCategorySelect();
-//   return false;
-// });
 
 function hideCategorySelect() {
   if($('#items-not-done tbody tr').length === 0 && $('#items-done tbody tr').length === 0){
@@ -98,7 +82,6 @@ $(document).on('click', '#closeModal', function () {
 $(document).on('shown.bs.modal', "#addItemModal", function() {
   $(this).find("#item-name").focus();
   setupSelectize('select#item_category_id', CATEGORIES, true);
-  setupSelectize('select#item_unit_id', UNITS, true);
 });
 
 $(document).on('shown.bs.modal', "#newListModal", function() {
@@ -119,7 +102,6 @@ $(document).on('shown.bs.modal', "#itemModal", function() {
   input.val('');
   input.val(tmpStr);
   setupSelectize('select#item_category_id', CATEGORIES, true);
-  setupSelectize('select#item_unit_id', UNITS, true);
 });
 
 $(document).on('shown.bs.modal', "#editItemModal", function() {
@@ -128,7 +110,6 @@ $(document).on('shown.bs.modal', "#editItemModal", function() {
   input.val('');
   input.val(tmpStr);
   setupSelectize('select#item_category_id', CATEGORIES, true);
-  setupSelectize('select#item_unit_id', UNITS, true);
 });
 
 $(document).on('shown.bs.modal', "#newCategoryModal", function() {

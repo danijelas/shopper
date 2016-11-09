@@ -19,14 +19,14 @@ a:hover, a:focus {
 .add-list{
   padding-left: 10px;
 }
-.category-select, .unit-select{
+.category-select{
   display: table;
 }
-.category_label, .selectize-control, .unit_label{
+.category_label, .selectize-control{
   display: table-cell;
   vertical-align: middle;
 }
-.category_label, .unit_label{
+.category_label{
   padding-right: 10px;
 }
 .selectize-input {

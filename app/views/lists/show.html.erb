@@ -6,7 +6,7 @@
   };
   CATEGORIES_SEARCH.unshift(all);
   var CATEGORIES = <%= raw current_user.categories.to_json(only: [:id, :name]) %>;
-  var UNITS = <%= raw current_user.units.to_json(only: [:id, :name]) %>;
+  
   $('#category_select').trigger('change');
 <% end -%>
 

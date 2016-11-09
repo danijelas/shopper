@@ -3,9 +3,8 @@ class CreateItems < ActiveRecord::Migration
     create_table :items do |t|
       t.references :list, index: { name: 'index_items_on_list_id' }
       t.references :category, null: true
-      t.references :unit, null: true
       t.string :name
-      t.decimal :qty, precision: 10, scale:2, default: 0
+      t.string :description
       t.decimal :price, precision: 10, scale: 2, default: 0
       t.boolean :done, default: false
 

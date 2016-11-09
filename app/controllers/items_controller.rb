@@ -1,27 +1,16 @@
 class ItemsController < ApplicationController
   before_action :set_list
   before_action :set_item, except: [:new, :create]
-  before_action :create_category, :create_unit, only: [:create, :update, :save_done]
+  before_action :create_category, only: [:create, :update, :save_done]
   before_action :get_items_for_selected_category, only: [:edit, :update, :create, :undone, :save_done, :show_confirm_done]
 
   def new
-    # logger.debug("------ #{session[:current_category]} -------")
     @item = @list.items.build()
     @item.category_id = session[:current_category].to_i unless session[:current_category].to_i == 0
-    # @item.category_id = current_user.units[0]
   end
 
   def create
     @item = @list.items.build(@item_params)
-    # logger.debug("------ #{@item.list.user.categories[5].id} -------")
-    # logger.debug("------ #{@item.category_id} -------")
-    # byebug
-    unless @item.category
-      # @item.category_id = 12
-      @item.category = current_user.categories.find_by(name: 'Miscellaneous')
-      # byebug
-    end
-
     if @item.save
       if @item.list.items.done.count == 1
         @item.list.update_attribute(:currency, session[:currency])
@@ -85,7 +74,7 @@ class ItemsController < ApplicationController
     end
 
     def item_params
-      params.require(:item).permit(:id, :name, :qty, :unit_id, :price, :done, :_destroy, :category_id, :currency, :description)
+      params.require(:item).permit(:id, :name, :price, :done, :_destroy, :category_id, :currency, :description)
     end
 
     def create_category
@@ -93,21 +82,19 @@ class ItemsController < ApplicationController
       if @item_params[:category_id].to_i == 0
         category_name = @item_params[:category_id]
         category = Category.create(name: category_name, user: current_user)
-        # logger.debug("------ #{category.id} -------")
         @item_params[:category_id] = category.id
-        # logger.debug("------ #{@item_params[:category_id]} -------")
       end
     end
 
-    def create_unit
-      @item_params ||= item_params
-      # byebug
-      if @item_params[:unit_id].to_i == 0
-        unit_name = @item_params[:unit_id]
-        unit = Unit.create(name: unit_name, user: current_user)
-        @item_params[:unit_id] = unit.id
-      end
-    end
+    # def create_unit
+    #   @item_params ||= item_params
+    #   # byebug
+    #   if @item_params[:unit_id].to_i == 0
+    #     unit_name = @item_params[:unit_id]
+    #     unit = Unit.create(name: unit_name, user: current_user)
+    #     @item_params[:unit_id] = unit.id
+    #   end
+    # end
 
     def get_items_for_selected_category
       category_id = if params[:category_id]
