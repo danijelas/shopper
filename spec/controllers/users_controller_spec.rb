@@ -1,10 +1,12 @@
-describe UsersController, type: :controller do
-  
-  # let(:user) { create(:user) }
+require 'rails_helper'
 
-  # before(:each) do
-  #   login_user(user)
-  # end
+RSpec.describe UsersController, type: :controller do
+  
+  let(:user) { create(:user) }
+
+  before(:each) do
+    login_user(user)
+  end
   
   # describe "GET index" do
     
@@ -33,5 +35,14 @@ describe UsersController, type: :controller do
   #   end
 
   # end
+
+  describe "POST set_currency" do
+    it "sets currency" do
+      
+      post :set_currency, currency: 'RSD', format: :js
+      
+      expect(session[:currency]).to eq('RSD')
+    end
+  end
 
 end

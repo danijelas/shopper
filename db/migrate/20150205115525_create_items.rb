@@ -5,7 +5,7 @@ class CreateItems < ActiveRecord::Migration
       t.references :category, null: true
       t.string :name
       t.string :description
-      t.decimal :price, precision: 10, scale: 2, default: 0
+      t.decimal :price, precision: 10, scale: 2, default: 0.00
       t.boolean :done, default: false
 
       t.timestamps

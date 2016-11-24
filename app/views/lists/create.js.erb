@@ -1,1 +1,2 @@
 $('#newListModal').modal('hide');
+$('#lists tbody').append('<%= j(render :partial => "lists/list_row", locals: {list: @list}) %>');

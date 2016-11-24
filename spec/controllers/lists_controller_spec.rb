@@ -33,125 +33,108 @@ RSpec.describe ListsController, type: :controller do
       list1 = create(:list, user: user)
       list2 = create(:list, user: second_user)
       list3 = create(:list, user: second_user)
+      
       get :index
+      
+      expect(response).to be_success
+      expect(response).to render_template("index")
+      
       expect(assigns(:lists)).to match_array([list,list1])
       expect(assigns(:lists)).not_to match_array([list,list1,list2,list3])
-      expect(response).to be_success
-      expect(response).to have_http_status(200)
-      expect(response).to render_template("index")
     end
   end
 
   describe "GET show" do
     it "return list with sorted items" do      
-      list = create(:list, user: user)
+      list = create(:list, user: user, currency: 'EUR')
       category1 = user.categories[0]
       category2 = user.categories[1]
       category3 = user.categories[2]
       category4 = create(:category)
-      item1 = create(:item, category: category1, list: list)
-      item2 = create(:item, category: category2, list: list)
-      item3 = create(:item, category: category1, list: list)
-      item4 = create(:item, category: category2, list: list)
-      item5 = create(:item, category: category3, list: list)
-      item6 = create(:item, category: category4, list: list)
+      session[:current_category] = 2
+      item1 = create(:item, category: category1, list: list, done: false)
+      item2 = create(:item, category: category2, list: list, done: false)
+      item3 = create(:item, category: category1, list: list, done: false)
+      item4 = create(:item, category: category2, list: list, done: true)
+      item5 = create(:item, category: category3, list: list, done: false)
+      item6 = create(:item, category: category4, list: list, done: false)
 
-      sorted_items = Hash.new
-      sorted_items[category1.name] = [item1]
-      sorted_items[category2.name] = [item2]
-      sorted_items[category1.name] << item3
-      sorted_items[category2.name] << item4
-      sorted_items[category3.name] = [item5]
-      sorted_items[category4.name] = [item6]
-      # sorted_items[category4.name] = [item6]
-      # sorted_items[category3.name] = [item5]
-      # sorted_items[category2.name] = [item4]
-      # sorted_items[category1.name] = [item3]
-      # sorted_items[category2.name] << item2
-      # sorted_items[category1.name] << item1
+      sorted_not_done_items = Hash.new
+      sorted_not_done_items[category1.name] = [item1]
+      sorted_not_done_items[category2.name] = [item2]
+      sorted_not_done_items[category1.name] << item3
+      sorted_not_done_items[category3.name] = [item5]
+      sorted_not_done_items[category4.name] = [item6]
+
+      sorted_done_items = Hash.new
+      sorted_done_items[category2.name] = [item4]
+    
       get :show, id: list
+      
       expect(response).to be_success
-      expect(response).to have_http_status(200)
       expect(response).to render_template("show")
-      expect(assigns(:items_sorted_by_category)).to eq(sorted_items)
+      
+      expect(assigns(:items_sorted_by_category_not_done)).to eq(sorted_not_done_items)
+      expect(assigns(:items_sorted_by_category_done)).to eq(sorted_done_items)
+      expect(session[:currency]).to eq('EUR')
+      expect(session[:current_category]).to eq (0)
     end
   end
 
   describe "GET new" do
     it "assigns a new list as @list" do
-      get :new
+      xhr :get, :new
+      
       expect(response).to be_success
-      expect(response).to have_http_status(200)
       expect(response).to render_template("new")
+      
       expect(assigns(:list)).to be_a_new(List)
     end
   end
 
   describe "GET edit" do
     it "edits list" do
-      list = create(:list, user: user)
-      category1 = user.categories[0]
-      category2 = user.categories[1]
-      item1 = create(:item, category: category1, list: list)
-      item2 = create(:item, category: category2, list: list)
-      item3 = create(:item, category: category1, list: list)
-      sorted_items = []
-      sorted_items << item1
-      sorted_items << item3
-      sorted_items << item2
-      get :edit, id: list
+      list1 = create(:list, user: user)
+      list2 = create(:list, user: user)
+      list3 = create(:list, user: user)
+      
+      xhr :get, :edit, id: list2
+      
       expect(response).to be_success
-      expect(response).to have_http_status(200)
       expect(response).to render_template("edit")
-      expect(assigns(:list)).to eq(list)
+      
+      expect(assigns(:list)).to eq(list2)
       expect(assigns(:list).user).to eq(user)
-      expect(assigns(:items)).to eq(sorted_items)
     end
   end
 
   describe "POST create" do
     context "with valid params" do
       it "creates a new List" do
-        i1 = FactoryGirl.attributes_for(:item)
-        i1[:category_id] = user.categories.first.id
-        i2 = FactoryGirl.attributes_for(:item)
-        i2[:category_id] = "newCategory1"
-        i3 = FactoryGirl.attributes_for(:item)
-        i3[:category_id] = "newCategory2"
-        i4 = FactoryGirl.attributes_for(:item)
-        i4[:category_id] = "newCategory2"
-        i = {}
-        i['0'] = i1
-        i['1'] = i2
-        i['2'] = i3
-        i['3'] = i4
         l = FactoryGirl.attributes_for(:list)
-        l[:items_attributes] = i
-        expect {
-          post :create, list: l, user: user
-        }.to change(List, :count).by(1)
-        list = (assigns(:list))
-        expect(list).to be_a(List)
-        expect(list).to be_persisted
-        expect(response).to redirect_to(List.last)
-        expect(list.user).to eq(user)
-        expect(list.user.categories.size).to eq(8)
-        items = list.items
-        expect(items[0].category.name).to eq(user.categories.first.name)
-        expect(items[1].category.name).to eq("newCategory1")
-        expect(items[2].category.name).to eq("newCategory2")
-        expect(items[3].category.name).to eq("newCategory2")
+        expect do
+          xhr :post, :create, list: l, user: user
+        end.to change(List, :count).by(1)
+        
+        expect(response).to be_success
+        expect(response).to render_template("create")
+        
+        expect(assigns(:list)).to be_a(List)
+        expect(assigns(:list)).to be_persisted
+        expect(assigns(:list).user).to eq(user)
       end
     end
 
     context "with invalid params" do
       it "does not save the new list" do
-        expect {
-          post :create, list: { name: nil }, user: user
-        }.to change(List, :count).by(0)
+        expect do
+          xhr :post, :create, list: { name: nil }, user: user
+        end.to_not change(List,:count)
+        
+        expect(response).to render_template("lists/create_error")
+        
         expect(assigns(:list)).to be_a_new(List)
         expect(assigns(:list)).to_not be_persisted
-        expect(response).to render_template("new")
         expect(assigns(:list).user).to eq(user)
       end
     end
@@ -163,49 +146,20 @@ RSpec.describe ListsController, type: :controller do
 
     context "with valid params" do
       it "updates the requested list" do
-        i1 = create(:item, list: list, category: user.categories.first)
-        i2 = create(:item, list: list, category: FactoryGirl.create(:category, user: user))
-        i3 = create(:item, list: list, category: FactoryGirl.create(:category, user: user))
-        i4 = create(:item, list: list, category: FactoryGirl.create(:category, user: user))
-        i1 = FactoryGirl.attributes_for(:item, id: i1, category_id: user.categories[1].id, user: user)
-        i2 = FactoryGirl.attributes_for(:item, id: i2, category_id: "updatedNewCategory1", user: user)
-        i3 = FactoryGirl.attributes_for(:item, id: i3, category_id: "updatedNewCategory2", user: user)
-        i4 = FactoryGirl.attributes_for(:item, id: i4, category_id: "updatedNewCategory2", user: user)
-        i = {}
-        i['0'] = i1
-        i['1'] = i2
-        i['2'] = i3
-        i['3'] = i4
-        attrs = FactoryGirl.attributes_for(:list)
-        attrs[:items_attributes] = i
-        put :update, id:list, list: attrs, user: user
+        put :update, id: list, list: {name: 'updatedList'}, user: user, format: :js
         list.reload
-        user.reload
-        # binding.pry
-        expect(assigns(:list)).to eq(list)
-        expect(list.name).to eq(list[:name])
-        expect(response).to redirect_to(list)
-        expect(assigns(:list).user).to eq(user)
-        categories = user.categories
-        expect(categories.size).to eq(11)
-        items = list.items
-        expect(items.size).to eq(4)
-        expect(items[0].category.name).to eq(categories[1].name)
-        expect(items[1].category.name).to eq("updatedNewCategory1")
-        expect(items[2].category.name).to eq("updatedNewCategory2")
-        expect(items[3].category.name).to eq("updatedNewCategory2")
+        expect(list.name).to eq('updatedList')
       end
     end
 
     context "with invalid params" do
       it "does not update the requested list" do
         listName = list.name
-        put :update, id:list, list: {name: nil}
+        xhr :put, :update, id:list, list: {name: nil}
         list.reload
+
+        expect(response).to render_template("lists/update_error")
         expect(list.name).to eq(listName)
-        expect(assigns(:list)).to eq(list)
-        expect(response).to render_template("edit")
-        expect(assigns(:list).user).to eq(user)
       end 
     end
   end
@@ -215,30 +169,55 @@ RSpec.describe ListsController, type: :controller do
     let!(:list) {create (:list), user: user}
 
     it "destroys the requested list" do
-      expect {
-        delete :destroy, id: list
-      }.to change(List, :count).by(-1)
-      expect(assigns(:list).user).to eq(user)
-    end
-
-    it "redirects to the lists list" do
-      delete :destroy, id: list
-      expect(response).to redirect_to(lists_url)
+      expect do
+        xhr :delete, :destroy, id: list
+      end.to change(List, :count).by(-1)
+      expect(response).to be_success
       expect(assigns(:list).user).to eq(user)
     end
   end
 
-  describe "POST item_done" do
-    let!(:list) {create (:list), user: user}
-    let!(:item) {create (:item), list: list, done: false}
+  # describe "POST item_done" do
+  #   let!(:list) {create (:list), user: user}
+  #   let!(:item) {create (:item), list: list, done: false}
 
-    it "toogles items done attribute" do
-      post :item_done, id: list, item_id: item, format: :js
-      item.reload
-      expect(item.done).to eq(true)
-      expect(assigns(:list).user).to eq(user)
-    end
+  #   it "toogles items done attribute" do
+  #     post :item_done, id: list, item_id: item, format: :js
+  #     item.reload
+  #     expect(item.done).to eq(true)
+  #     expect(assigns(:list).user).to eq(user)
+  #   end
     
+  # end
+
+  describe "GET change_category" do
+    it "returns list of done items for selected category, 
+        if category 0 returns list of all done items" do
+      list = create(:list, user: user)
+      category1 = user.categories[0]
+      category2 = user.categories[1]
+      item1 = create(:item, category: category1, list: list, price: 2, done: true)
+      item2 = create(:item, category: category2, list: list, price: 4, done: true)
+      item3 = create(:item, category: category1, list: list, price: 3, done: true)
+      item4 = create(:item, category: category1, list: list, price: 5, done: false)
+      items_done = []
+      items_done << item3
+      items_done << item1
+
+      xhr :get, :change_category, id: list, category: category1
+
+      expect(response).to be_success
+      expect(assigns(:done_items)).to eq(items_done)
+      expect(session[:current_category]).to eq (category1.id.to_s)
+
+      items_done << item2
+
+      xhr :get, :change_category, id: list, category: 0
+
+      expect(response).to be_success
+      expect(assigns(:done_items)).to eq(items_done)
+      expect(session[:current_category]).to eq ("0")
+    end
   end
 
 end

@@ -7,8 +7,6 @@ class ListsController < ApplicationController
 
   def index
     @lists = current_user.lists.order(:name)
-    # @disable_currency_select = true
-    # respond_with(@lists)
   end
 
   def show
@@ -62,7 +60,7 @@ class ListsController < ApplicationController
   def create
     @list = current_user.lists.build(list_params)
     if @list.save
-      render js: "window.location.href='#{list_url(@list)}'"
+      # render js: "window.location.href='#{list_url(@list)}'"
     else
       render 'lists/create_error'
     end
@@ -84,8 +82,9 @@ class ListsController < ApplicationController
   end
 
   def change_category
-    session[:current_category] = params[:category]
-    @done_items = @list.items.done
+    category_id = params[:category]
+    session[:current_category] = category_id
+    @done_items = category_id.to_i == 0 ? @list.items.done : @list.items.where(category_id: category_id).done
   end
 
   private
