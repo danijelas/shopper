@@ -23,17 +23,17 @@ module ListsHelper
     end
   end
 
-  def item_sum(current_user, item)
-    sum = number_with_precision(item.price, precision: 2)
-    if !(item.list.currency.blank?) && (item.list.currency != current_user.currency)
-      sum_in_cents = sum.to_f * 100
-      money = Money.new(sum_in_cents, item.list.currency)
-      money = money.exchange_to(current_user.currency)
-      sum = sum + ' ' + item.list.currency + '/' + money + ' ' + current_user.currency
-    else
-      sum = sum + ' ' + current_user.currency
-    end
-  end
+  # def item_sum(current_user, item)
+  #   sum = number_with_precision(item.price, precision: 2)
+  #   if !(item.list.currency.blank?) && (item.list.currency != current_user.currency)
+  #     sum_in_cents = sum.to_f * 100
+  #     money = Money.new(sum_in_cents, item.list.currency)
+  #     money = money.exchange_to(current_user.currency)
+  #     sum = sum + ' ' + item.list.currency + '/' + money + ' ' + current_user.currency
+  #   else
+  #     sum = sum + ' ' + current_user.currency
+  #   end
+  # end
 
   def item_link(item)
     if item.done
