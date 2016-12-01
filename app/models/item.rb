@@ -1,4 +1,5 @@
 class Item < ActiveRecord::Base
+  
   belongs_to :list
   belongs_to :category
   before_validation :set_category, if: 'self.category.nil?'
