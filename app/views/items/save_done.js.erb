@@ -1,6 +1,6 @@
 var itemTr = $('tr[data-item=<%= @item.id%>]').remove();
 $('#items-done tbody').append('<%= j(render :partial => "lists/item", locals: {item: @item}) %>');
-$('#total_sum').text('<%= items_sum(current_user, @items_for_selected_category, @list) %>');
+$('#total_sum').text('<%= total_items_sum(current_user, @list, @items_for_selected_category) %>');
 $('#itemModal').modal('hide');
 $('[data-toggle="popover"]').popover();
 

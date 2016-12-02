@@ -2,7 +2,7 @@ $('#addItemModal').modal('hide');
 
 <% if @item.done %>
   $('#items-done tbody').append('<%= j(render :partial => "lists/item", locals: {item: @item}) %>');
-  $('#total_sum').text('<%= items_sum(current_user, @items_for_selected_category, @list) %>');
+  $('#total_sum').text('<%= total_items_sum(current_user, @list, @items_for_selected_category) %>');
   $('[data-toggle="popover"]').popover();
 <% else %>
   $('#items-not-done tbody').append('<%= j(render :partial => "lists/item", locals: {item: @item}) %>');

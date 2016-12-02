@@ -7,6 +7,7 @@ module ApplicationHelper
   def currency_codes
     Money::Currency.table.values.map{|a| a[:iso_code]}
   end
+  
   # def nested_attributes_for(form_builder, *args)
   #   options = args.extract_options!
   #   javascript_tag do
